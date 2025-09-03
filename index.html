@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi sitio | T. Olivera</title>
+  <link rel="stylesheet" href="./public/styles/include/index.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <header class="header">
+    <a href="?access=private" class="lock-link" title="Acceso privado">
+      <i class="fa-solid fa-lock"></i>
+    </a>
+
+    <div class="header-deco" aria-hidden="true"></div>
+    <div class="container header-inner">
+      <div class="avatar-wrap">
+        <img src="./public/assets/images/media/yo.jpg" alt="Foto de Tadeo" class="profile-pic" />
+      </div>
+
+      <div class="hero-text">
+        <h1 class="reveal">Tadeo Olivera</h1>
+        <p class="subtitle reveal">Programador enfocado en sistemas y desarrollo web.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="main container">
+    <section class="about reveal-section" id="about">
+      <h2>Sobre mí</h2>
+      <p>
+        Soy estudiante de Ingeniería en Computación en FING-UDELAR, con sólida formación en lógica de programación y una marcada capacidad de adaptación a diversos lenguajes y entornos tecnológicos. Poseo experiencia en el diseño y desarrollo de soluciones orientadas a sistemas, así como en la creación de sitios web completos.
+      </p>
+
+      <p>
+        Me desenvuelvo con fluidez en los siguientes lenguajes y tecnologías:
+      </p>
+      <ul class="tech-grid" aria-label="Tecnologías que manejo">
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/cpp.png" alt="C++ logo" loading="lazy" />
+          <span class="tech-name">C++</span>
+        </li>
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/html.png" alt="HTML5 logo" loading="lazy" />
+          <span class="tech-name">HTML</span>
+        </li>
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/css.png" alt="CSS3 logo" loading="lazy" />
+          <span class="tech-name">CSS</span>
+        </li>
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/javascript.png" alt="JavaScript logo" loading="lazy" />
+          <span class="tech-name">JavaScript</span>
+        </li>
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/php.png" alt="PHP logo" loading="lazy" />
+          <span class="tech-name">PHP</span>
+        </li>
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/mysql.png" alt="MySQL logo" loading="lazy" />
+          <span class="tech-name">MySQL</span>
+        </li>
+      </ul>
+    </section>
+
+    <section class="projects reveal-section" id="projects">
+      <h2>Proyectos destacados</h2>
+
+      <div class="project-list">
+        <article class="project card">
+          <h3>Módulo TSocio</h3>
+          <p>
+            Implementación modular en C++ para la gestión eficiente de socios, con operaciones <strong>O(1)</strong> en el peor caso gracias a estructuras con tope fijo.
+          </p>
+          <p>
+            El módulo encapsula datos personales y géneros favoritos, con manejo de memoria y una interfaz clara para agregar y consultar socios.
+          </p>
+
+          <div class="console-box glass">
+            <div class="console-header">
+              <div class="console-dots" aria-hidden="true">
+                <span class="console-dot red"></span>
+                <span class="console-dot yellow"></span>
+                <span class="console-dot green"></span>
+              </div>
+              <div class="console-actions">
+                <button class="btn-copy" title="Copiar salida" aria-label="Copiar salida">📋</button>
+              </div>
+            </div>
+
+            <div class="console-preview" aria-live="polite">
+              <pre id="consoleText" data-text="Socio 12345678: Massimo García
+Fecha de alta: 4/6/2000
+Géneros favoritos: 12 7 3 9">Socio 12345678: Massimo García
+Fecha de alta: 4/6/2000
+Géneros favoritos: 12 7 3 9</pre>
+              <p class="caption">Ejemplo de salida en consola utilizando la función <code>imprimirTSocio</code>.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="project card">
+          <h3>juegoDT <em>(en proceso)</em></h3>
+          <p>
+            Simulador web de gestión deportiva con enfoque entretenido y técnico. El usuario puede registrarse, iniciar sesión, administrar su equipo, comprar y vender jugadores, y visualizar su perfil con información personal y financiera. El sistema incluye manejo de sesiones, validación de formularios, interacción con base de datos MySQL, y lógica modular distribuida en múltiples scripts PHP.
+          </p>
+          <ul>
+            <li>Frontend: HTML, CSS, JavaScript</li>
+            <li>Backend: PHP orientado a módulos, con control de flujo y seguridad básica</li>
+            <li>Base de datos: MySQL, con operaciones CRUD para usuarios y jugadores</li>
+            <li>Funcionalidades: registro, login, tienda de jugadores, perfil personal, sistema de dinero dinámico</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="contact reveal-section" id="contact">
+      <h2>Contacto</h2>
+      <a href="mailto:tadeooliverabloops@gmail.com">tadeooliverabloops@gmail.com</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2025 Tadeo Olivera.</p>
+  </footer>
+
+  <script type="module" src="./public/src/include/index.js" defer></script>
+</body>
+</html>

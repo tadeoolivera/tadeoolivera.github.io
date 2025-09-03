@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo | CAVANA</title>
+  <link rel="stylesheet" href="./styles/include/catalogo.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Playfair+Display:wght@600&display=swap" />
+</head>
+<body>
+
+  <header class="header fade-in">
+    <div class="wrapper header-flex">
+      <div class="marca-bloque">
+        <img src="./assets/images/logo/logo.png" alt="Logo CAVANA" class="logo logo-scroll" />
+        <span class="marca">CAVANA</span>
+      </div>
+      <div class="menu-toggle"><i class="fas fa-bars"></i></div>
+      <nav class="menu">
+        <a href="./index.html">Inicio</a>
+        <a href="./catalogo.html" class="activo">Catálogo</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero-catalogo fade-in">
+    <div class="wrapper">
+      <h2>Descubrí tu próximo bolso</h2>
+      <p>Filtrá por estilo, color o precio. Elegí el que te acompañe todos los días.</p>
+      <input type="text" id="busqueda" name="busqueda" placeholder="Buscar por nombre..." />
+    </div>
+  </section>
+
+  <section class="contenido-catalogo">
+    <div class="wrapper layout-catalogo">
+      <aside class="sidebar-filtros fade-in">
+        <div class="grupo-filtros" id="filtros-tipo">
+          <h4>Tipo</h4>
+          <label><input type="checkbox" value="tote">Tote</label>
+          <label><input type="checkbox" value="bandolera">Bandolera</label>
+          <label><input type="checkbox" value="clutch">Clutch</label>
+        </div>
+
+        <div class="grupo-filtros" id="filtros-color">
+          <h4>Color</h4>
+          <label><input type="checkbox" value="marron">Marrón</label>
+          <label><input type="checkbox" value="rojo">Rojo</label>
+          <label><input type="checkbox" value="blanco">Blanco</label>
+        </div>
+
+        <div class="grupo-filtros" id="filtros-precio">
+          <h4>Precio</h4>
+          <label><input type="checkbox" value="low">Menos de $1500</label>
+          <label><input type="checkbox" value="mid">$1500 - $2500</label>
+          <label><input type="checkbox" value="high">Más de $2500</label>
+        </div>
+      </aside>
+
+      <main class="zona-productos">
+        <div id="resultado-busqueda" class="resultado-busqueda"></div>
+        <div class="grid-productos" id="productos-container">
+          <!-- Acá los productos se cargan dinámicamente desde `catalogo.js` -->
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <footer class="footer fade-in" id="contacto">
+    <div class="wrapper footer-content">
+      <p>&copy; 2025 CAVANA. Todos los derechos reservados.</p>
+      <div class="redes-sociales">
+        <a href="https://www.instagram.com/cavana" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/59894990087" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="mailto:contacto@gmail.com"><i class="fas fa-envelope"></i></a>
+      </div>
+      <p class="contacto">Montevideo, Uruguay</p>
+    </div>
+  </footer>
+
+  <script type="module" src="/private/main/src/controllers/accessController.js"></script> <!-- WHILE TESTING -->
+  <script type="module" src="./src/include/catalogo.js"></script>
+</body>
+</html>

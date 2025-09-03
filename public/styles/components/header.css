@@ -1,0 +1,43 @@
+.header {
+  position: relative;
+  padding: 3.2rem 0;
+  overflow: hidden;
+  color: white;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2) 60%);
+}
+.header-deco {
+  position: absolute;
+  inset: -12% -12% auto auto;
+  width: 660px;
+  height: 660px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.06), transparent 18%),
+              radial-gradient(circle at 80% 80%, rgba(255,60,166,0.06), transparent 18%);
+  transform: rotate(12deg);
+  filter: blur(48px);
+  pointer-events: none;
+  opacity: 0.95;
+}
+.header-inner {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.lock-link {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
+  font-size: 1.4rem;
+  color: rgba(255, 255, 255, 0.85);
+  transition: transform 0.2s ease, color 0.2s ease;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.4rem;
+  border-radius: 50%;
+}
+
+.lock-link:hover {
+  transform: scale(1.1);
+  color: #ffffff;
+}

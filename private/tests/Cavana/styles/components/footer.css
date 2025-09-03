@@ -1,0 +1,30 @@
+/* === Footer === */
+.footer {
+  background-color: #0b0b0b;
+  border-top: 1px solid #444;
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 0.95rem;
+}
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.redes-sociales {
+  display: flex;
+  gap: 1rem;
+}
+.redes-sociales a {
+  color: #cccccc;
+  font-size: 1.4rem;
+  transition: color 0.3s ease;
+}
+.redes-sociales a:hover {
+  color: #a87532;
+}
+.contacto {
+  color: #888;
+  font-size: 0.85rem;
+}
