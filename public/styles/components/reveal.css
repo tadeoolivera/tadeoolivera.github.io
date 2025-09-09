@@ -1,9 +1,0 @@
-.reveal-section {
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity .6s ease, transform .6s cubic-bezier(.2,.9,.25,1);
-}
-.reveal-section.in-view {
-  opacity: 1;
-  transform: none;
-}
