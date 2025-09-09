@@ -1,0 +1,106 @@
+/* === Menú móvil === */
+.menu-toggle {
+  display: none;
+  font-size: 1.4rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .menu-toggle {
+    display: block;
+    margin-top: 0.5rem;
+  }
+
+  .menu {
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #111;
+    padding: 1rem 0;
+    transform: translateY(-20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+
+  .menu.visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .menu a {
+    padding: 0.5rem 1rem;
+    text-align: center;
+  }
+}
+
+/* === Hero principal === */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .btn-cta {
+    font-size: 0.95rem;
+    padding: 0.6rem 1rem;
+  }
+}
+
+/* === Beneficios === */
+@media (max-width: 768px) {
+  .beneficios ul {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* === Footer === */
+@media (max-width: 768px) {
+  .footer {
+    font-size: 0.85rem;
+    padding: 1.5rem 0;
+  }
+
+  .redes-sociales a {
+    font-size: 1.2rem;
+  }
+}
+
+/* === Catálogo === */
+@media (max-width: 1024px) {
+  .grid-productos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .layout-catalogo {
+    flex-direction: column;
+  }
+
+  .sidebar-filtros {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+
+  .grid-productos {
+    grid-template-columns: 1fr;
+  }
+
+  .resultado-busqueda {
+    text-align: center;
+  }
+}

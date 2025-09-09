@@ -1,0 +1,39 @@
+.project-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+@media(min-width:880px) {
+  .project-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.card {
+  background: var(--card-grad);
+  border-radius: 14px;
+  padding: 1.1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  border-left: 6px solid transparent;
+  position: relative;
+  overflow: visible;
+  transition: transform .28s, box-shadow .28s, border-color .28s;
+}
+.card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  background: var(--accent);
+}
+.card:hover {
+  transform: translateY(-10px) scale(1.01);
+  box-shadow: 0 26px 60px rgba(6,22,55,0.16);
+}
+.card h3 {
+  margin-top: 0;
+}

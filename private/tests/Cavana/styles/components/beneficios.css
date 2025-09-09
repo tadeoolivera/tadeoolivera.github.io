@@ -1,0 +1,22 @@
+/* === Beneficios === */
+.beneficios {
+  background-color: #111;
+  padding: 3rem 0;
+}
+.beneficios ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  list-style: none;
+}
+.beneficios li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #a87532;
+  font-weight: 600;
+}
+.beneficios i {
+  font-size: 1.2rem;
+}

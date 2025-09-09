@@ -1,0 +1,20 @@
+@media (max-width: 640px) {
+  .header-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 14px;
+  }
+  .hero-text h1 {
+    font-size: 1.4rem;
+  }
+  .project-list {
+    grid-template-columns: 1fr;
+  }
+  .console-box {
+    max-width: 100%;
+  }
+}
