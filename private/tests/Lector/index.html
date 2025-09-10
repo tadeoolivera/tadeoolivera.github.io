@@ -1,0 +1,323 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    <script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script>
+    <meta charset="utf-8">
+    <style>
+        /* keep the original tiny script the demo used (optional) */
+        .js #features { margin-left: -12000px; width: 100%; }
+    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>My Manga Book</title>
+    <meta name="description" content="">
+    <meta name="author" content="Marcio Aguiar">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Load wow_book first, then your style.css so your rules override the plugin -->
+    <link rel="stylesheet" href="css/wow_book.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/preview.css">
+
+    <link href='//fonts.googleapis.com/css?family=News+Cycle' rel='stylesheet' type='text/css'>
+    <script src="js/modernizr-1.6.min.js"></script>
+</head>
+<body>
+<div id="container">
+<nav>
+    <ul>
+        <li><a id='first'     href="#" title='goto first page'   >First page</a></li>
+        <li><a id='back'      href="#" title='go back one page'  >Back</a></li>
+        <li><a id='next'      href="#" title='go foward one page'>Next</a></li>
+        <li><a id='last'      href="#" title='goto last page'    >last page</a></li>
+        <li><a id='zoomin'    href="#" title='zoom in'           >Zoom In</a></li>
+        <li><a id='zoomout'   href="#" title='zoom out'          >Zoom Out</a></li>
+        <li><a id='slideshow' href="#" title='start slideshow'   >Slide Show</a></li>
+        <li><a id='flipsound' href="#" title='flip sound on/off' >Flip sound</a></li>
+        <li><a id='fullscreen' href="#" title='fullscreen on/off' >Fullscreen</a></li>
+        <li><a id='thumbs'    href="#" title='thumbnails on/off' >Thumbs</a></li>
+    </ul>
+</nav>
+
+<div id="main">
+    <!--
+      Add class "manga-full-bleed" to make images full-bleed (object-fit: cover).
+      If you want right-to-left reading by reversing the DOM, uncomment the JS snippet below.
+    -->
+    <div id='features' class="manga-full-bleed">
+
+        <!-- front cover (hardcover effect kept via class) -->
+        <div id='cover' class="pagefx hardpage">
+            <img src="images/39/cover.jpg" alt="Front cover" />
+        </div>
+
+        <!-- image-only pages (one <div> per page). Add or remove as needed -->
+        <div><img src="images/39/chp341/1.jpg" alt="page 1" /></div>
+        <div><img src="images/39/chp341/2.jpg" alt="page 2" /></div>
+        <div data-double="true"><img src="images/39/chp341/3.jpg" alt="page 3" /></div>
+        <div><img src="images/39/chp341/4.jpg" alt="page 4" /></div>
+        <div><img src="images/39/chp341/5.jpg" alt="page 5" /></div>
+        <div><img src="images/39/chp341/6.jpg" alt="page 6" /></div>
+        <div><img src="images/39/chp341/7.jpg" alt="page 7" /></div>
+        <div><img src="images/39/chp341/8.jpg" alt="page 8" /></div>
+        <div><img src="images/39/chp341/9.jpg" alt="page 9" /></div>
+        <div data-double="true"><img src="images/39/chp341/10.jpg" alt="page 10" /></div>
+        <div data-double="true"><img src="images/39/chp341/11.jpg" alt="page 11" /></div>
+        <div><img src="images/39/chp341/12.jpg" alt="page 12" /></div>
+        <div><img src="images/39/chp341/13.jpg" alt="page 13" /></div>
+        <div><img src="images/39/chp341/14.jpg" alt="page 14" /></div>
+        <div><img src="images/39/chp341/15.jpg" alt="page 15" /></div>
+        <div><img src="images/39/chp341/16.jpg" alt="page 16" /></div>
+        <div><img src="images/39/chp341/17.jpg" alt="page 17" /></div>
+        <div data-double="true"><img src="images/39/chp341/18.jpg" alt="page 18" /></div>
+        <div><img src="images/39/chp341/19.jpg" alt="page 19" /></div>
+        <div><img src="images/39/chp341/20.jpg" alt="page 20" /></div>
+        <div><img src="images/39/chp341/21.jpg" alt="page 21" /></div>
+        <div><img src="images/39/chp342/1.jpg" alt="page 22" /></div>
+        <div><img src="images/39/chp342/2.jpg" alt="page 23" /></div>
+        <div><img src="images/39/chp342/3.jpg" alt="page 24" /></div>
+        <div><img src="images/39/chp342/4.jpg" alt="page 25" /></div>
+        <div><img src="images/39/chp342/5.jpg" alt="page 26" /></div>
+        <div><img src="images/39/chp342/6.jpg" alt="page 27" /></div>
+        <div><img src="images/39/chp342/7.jpg" alt="page 28" /></div>
+        <div><img src="images/39/chp342/8.jpg" alt="page 29" /></div>
+        <div><img src="images/39/chp342/9.jpg" alt="page 30" /></div>
+        <div><img src="images/39/chp342/10.jpg" alt="page 31" /></div>
+        <div><img src="images/39/chp342/11.jpg" alt="page 32" /></div>
+        <div data-double="true"><img src="images/39/chp342/12.jpg" alt="page 33" /></div>
+        <div data-double="true"><img src="images/39/chp342/13.jpg" alt="page 34" /></div>
+        <div><img src="images/39/chp342/14.jpg" alt="page 35" /></div>
+        <div><img src="images/39/chp342/15.jpg" alt="page 36" /></div>
+        <div><img src="images/39/chp342/16.jpg" alt="page 37" /></div>
+        <div><img src="images/39/chp342/17.jpg" alt="page 38" /></div>
+        <div><img src="images/39/chp342/18.jpg" alt="page 39" /></div>
+        <div><img src="images/39/chp342/18.jpg" alt="page 39" /></div>
+        <div><img src="images/39/chp343/1.jpg" alt="page 40" /></div>
+        <div><img src="images/39/chp343/2.jpg" alt="page 41" /></div>
+        <div><img src="images/39/chp343/3.jpg" alt="page 42" /></div>
+        <div><img src="images/39/chp343/4.jpg" alt="page 43" /></div>
+        <div data-double="true"><img src="images/39/chp343/5.jpg" alt="page 44" /></div>
+        <div><img src="images/39/chp343/6.jpg" alt="page 45" /></div>
+        <div><img src="images/39/chp343/7.jpg" alt="page 46" /></div>
+        <div><img src="images/39/chp343/8.jpg" alt="page 47" /></div>
+        <div><img src="images/39/chp343/9.jpg" alt="page 48" /></div>
+        <div><img src="images/39/chp343/10.jpg" alt="page 49" /></div>
+        <div><img src="images/39/chp343/11.jpg" alt="page 50" /></div>
+        <div><img src="images/39/chp343/12.jpg" alt="page 51" /></div>
+        <div><img src="images/39/chp343/13.jpg" alt="page 52" /></div>
+        <div><img src="images/39/chp343/14.jpg" alt="page 53" /></div>
+        <div><img src="images/39/chp343/15.jpg" alt="page 54" /></div>
+        <div data-double="true"><img src="images/39/chp343/16.jpg" alt="page 55" /></div>
+        <div data-double="true"><img src="images/39/chp343/17.jpg" alt="page 56" /></div>
+        <div data-double="true"><img src="images/39/chp343/18.jpg" alt="page 57" /></div>
+        <div><img src="images/39/chp343/19.jpg" alt="page 58" /></div>
+        <div><img src="images/39/chp343/19.jpg" alt="page 58" /></div>
+
+        <!-- back cover -->
+        <div class='last_cover pagefx hardpage'>
+            <img src="images/39/cover_last.png" alt="Back cover" />
+        </div>
+
+    </div> <!-- /#features -->
+</div>
+
+<div id='thumbs_holder'></div>
+<footer></footer>
+</div> <!--! end of #container -->
+
+<!-- JS libs -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>!window.jQuery && document.write(unescape('%3Cscript src=\"./js/libs/jquery-1.9.1.min.js\"%3E%3C/script%3E'))</script>
+
+<script type="text/javascript" src="wow_book.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+    var $f = $('#features');
+
+    // reverse DOM for RTL reading (so the last element in HTML becomes the visible start)
+    var children = $f.children().get().reverse();
+    $f.empty().append(children);
+
+    // initialize wowBook (we disable the built-in slideshow so we can implement RTL custom slideshow)
+    $('#features').wowBook({
+        height : 800,
+        width  : 1050,
+        centeredWhenClosed : true,
+        hardcovers : true,
+        turnPageDuration : 1000,
+        pageNumbers: false,
+        numberedPages: false,
+        slideShow : false,
+        slideShowDelay : 3000,
+        slideShowLoop : true,
+        controls : {
+            zoomIn    : '#zoomin',
+            zoomOut   : '#zoomout',
+            next      : '#next',
+            back      : '#back',
+            first     : '#first',
+            last      : '#last',
+            slideShow : '#slideshow',
+            flipSound : '#flipsound',
+            thumbnails : '#thumbs',
+            fullscreen : '#fullscreen'
+        },
+        scaleToFit: "#container",
+        thumbnailsPosition : 'bottom',
+        onFullscreenError : function(){
+            var msg="Fullscreen failed.";
+            if (self!=top) msg="The frame is blocking full screen mode. Click on 'remove frame' button above and try to go full screen again."
+            alert(msg);
+        }
+    }).css({'display':'none', 'margin':'auto'}).fadeIn(400);
+
+    // central book object (single reference)
+    var book = $.wowBook("#features");
+
+    // goto last page (back cover) robustly — try immediately and re-try shortly after initialization if needed
+    function goToLast() {
+        try {
+            if (book && book.pages && book.pages.length) {
+                book.gotoPage(book.pages.length - 1);
+                return true;
+            }
+        } catch (e) {
+            // ignore and retry
+        }
+        return false;
+    }
+
+    if (!goToLast()) {
+        setTimeout(function(){ if (!goToLast()) setTimeout(goToLast, 200); }, 100);
+    }
+
+    // clicking the cover should flip in reading direction (RTL): use book.back()
+    $("#cover").off('click').on('click', function(e){
+        e.preventDefault();
+        if (book && book.back) book.back();
+    });
+
+    // thumbnails helper
+    function rebuildThumbnails(){
+        // recreate thumbs using plugin helpers
+        book.destroyThumbnails();
+        book.showThumbnails();
+
+        // if thumbnails were injected into #thumbs_holder, center them vertically as before
+        $("#thumbs_holder").css("marginTop", -$("#thumbs_holder").height()/2);
+
+        // OPTIONAL: reverse thumbnail order so it reads RTL (only if thumbs are in #thumbs_holder)
+        // many WOWBook themes inject thumbs into that container; this is a best-effort.
+        var $container = $("#thumbs_holder");
+        if ($container.length && $container.children().length > 1) {
+            // reverse children order
+            $container.children().each(function(i, el){
+                $container.prepend(el);
+            });
+        }
+    }
+
+    // REST OF HANDLERS (thumbnails controls)
+    $("#thumbs_position button").on("click", function(){
+        var position = $(this).text().toLowerCase();
+        if ($(this).data("customized")) {
+            position = "top";
+            book.opts.thumbnailsParent = "#thumbs_holder";
+        } else {
+            book.opts.thumbnailsParent = "body";
+        }
+        book.opts.thumbnailsPosition = position;
+        rebuildThumbnails();
+    });
+    $("#thumb_automatic").click(function(){
+        book.opts.thumbnailsSprite = null;
+        book.opts.thumbnailWidth = null;
+        rebuildThumbnails();
+    });
+    $("#thumb_sprite").click(function(){
+        book.opts.thumbnailsSprite = "images/thumbs.jpg";
+        book.opts.thumbnailWidth = 136;
+        rebuildThumbnails();
+    });
+    $("#thumbs_size button").click(function(){
+        var factor = 0.02*( $(this).index() ? -1 : 1 );
+        book.opts.thumbnailScale = book.opts.thumbnailScale + factor;
+        rebuildThumbnails();
+    });
+
+    /**************************************************************************
+     * Custom RTL slideshow
+     *
+     * - Calls book.back() periodically (so pages flip toward the front-cover)
+     * - Respects book.opts.slideShowDelay and book.opts.slideShowLoop
+     * - Replaces the default slideshow click handler
+     **************************************************************************/
+    (function(){
+        var rtlTimer = null;
+        var delay = (book.opts && book.opts.slideShowDelay) ? book.opts.slideShowDelay : 1500;
+        var turnDuration = book.turnPageDuration || (book.opts && book.opts.turnPageDuration) || 1000;
+
+        function startRTLSlideshow(){
+            if (rtlTimer) return;
+            // indicate running (plugin might have UI classes; best-effort)
+            if (book.toggleControl) book.toggleControl("slideshow", true);
+
+            (function step(){
+                if (!book) return stopRTLSlideshow();
+
+                // if the book is animating, wait a bit
+                if (book.animating || book.holdedPage) {
+                    rtlTimer = setTimeout(step, 100);
+                    return;
+                }
+
+                // if we're at the first page (reading order start), handle loop or stop
+                var onFirst = book.isOnPage(0);
+                if (onFirst) {
+                    if (book.opts && book.opts.slideShowLoop) {
+                        // jump to last page and continue
+                        book.gotoPage(book.pages.length - 1);
+                        rtlTimer = setTimeout(step, delay + turnDuration);
+                    } else {
+                        stopRTLSlideshow();
+                        return;
+                    }
+                } else {
+                    // flip backward one step (reading direction)
+                    if (book.back) book.back();
+                    rtlTimer = setTimeout(step, delay + turnDuration);
+                }
+            })();
+        }
+
+        function stopRTLSlideshow(){
+            clearTimeout(rtlTimer);
+            rtlTimer = null;
+            if (book && book.toggleControl) book.toggleControl("slideshow", false);
+        }
+
+        // Replace plugin's slideshow handler with our RTL one
+        $('#slideshow').off('click.wowbook').off('click').on('click', function(e){
+            e.preventDefault();
+            if (rtlTimer) stopRTLSlideshow(); else startRTLSlideshow();
+        });
+
+        // Optional: start automatically on load — uncomment to enable:
+        // startRTLSlideshow();
+    })();
+
+});
+</script>
+
+<!-- scripts concatenated and minified via ant build script-->
+<script src="js/plugins.js"></script>
+<script src="js/script.js"></script>
+<!-- end concatenated and minified scripts-->
+
+</body>
+</html>
