@@ -1,914 +1,130 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Idle Programmer</title>
-  <style>
-    :root{
-      --accent:#7dd3fc; --accent2:#60a5fa; --muted:#9aa9c7; --good:#a7f3d0; --bad:#fb7185; --bg:#071022;
-      --badge-on: #16a34a; --badge-off: #334155; --badge-warn: #f59e0b;
-    }
-    html{scroll-behavior:auto}
-    body{
-      margin:0; min-height:100vh; font-family:"Fira Code","JetBrains Mono",monospace;
-      color:#dbe9ff;
-      background:
-        linear-gradient(180deg, rgba(2,8,23,0.75), rgba(2,8,23,0.9)),
-        url("https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1800&q=60") center/cover fixed no-repeat;
-      display:flex; justify-content:center; padding:28px;
-    }
-    .app{
-      width:100%; max-width:1200px; background:rgba(3,10,18,0.94); border-radius:12px;
-      padding:16px; box-shadow:0 20px 60px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03);
-      display:grid; grid-template-columns: 1fr 380px; gap:16px; position:relative;
-    }
-    header{grid-column:1/-1; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px}
-    .logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#021029;font-weight:900}
-    .stats{display:flex;gap:8px;align-items:center}
-    .stat{background:rgba(255,255,255,0.02);padding:8px 10px;border-radius:8px;text-align:center;min-width:120px}
-    .muted{color:var(--muted);font-size:12px}
-    .panel{background:#041324;padding:12px;border-radius:8px;color:#cfeffd}
-    .code-line{padding:6px 8px;border-radius:6px;background:transparent;margin-bottom:6px}
-    .btn{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;padding:8px 10px;border-radius:8px;font-weight:800;color:#021029;cursor:pointer}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-    .btn[disabled]{opacity:0.45;cursor:not-allowed}
-    .upgrades{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto;padding-right:6px}
-    .upgrade{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.02)}
-    .runner{position:fixed;width:12px;height:12px;border-radius:50%;background:linear-gradient(90deg,var(--accent),var(--accent2));box-shadow:0 8px 28px rgba(96,165,250,0.24);z-index:9999;pointer-events:none}
-    .float-pop{position:fixed;pointer-events:none;font-weight:900;color:var(--good);text-shadow:0 4px 12px rgba(0,0,0,0.6);z-index:9998;font-size:14px}
-    .pulse{animation:pulseBuy 600ms ease-out}
-    @keyframes pulseBuy{0%{transform:translateY(0);box-shadow:0 0 0 0 rgba(125,211,252,0.18)}60%{transform:translateY(-4px);box-shadow:0 0 18px 6px rgba(125,211,252,0.04)}100%{transform:translateY(0);box-shadow:none}}
-    .hud{position:fixed;right:18px;top:18px;background:rgba(2,6,10,0.9);border-radius:10px;padding:10px 12px;z-index:10000;display:flex;gap:14px;align-items:center;border:1px solid rgba(255,255,255,0.04)}
-    .hud .mut{color:var(--muted);font-size:12px}
-    .hud .v{font-weight:900;font-size:16px}
-    #debug{position:fixed;left:18px;bottom:18px;background:rgba(8,8,8,0.85);color:#f2a6a6;padding:8px 10px;border-radius:8px;z-index:10001;max-width:40vw;max-height:30vh;overflow:auto;font-size:13px;display:none}
-    canvas#particles{position:fixed;left:0;top:0;right:0;bottom:0;z-index:9995;pointer-events:none}
-    #visualCode{background:#031225;padding:8px;border-radius:6px;color:#cfeffd;white-space:pre-wrap;min-height:100px}
-    #log{color:var(--muted);margin-top:8px;max-height:180px;overflow:auto}
-    .small-muted{font-size:12px;color:var(--muted)}
-    .section-title{font-weight:900;margin-bottom:6px}
-    .tools-row{display:flex;gap:8px;align-items:center}
-    .badge{display:inline-block;min-width:42px;padding:4px 6px;border-radius:999px;font-weight:800;font-size:12px;color:#021029;margin-left:8px;background:var(--badge-off);box-shadow:inset 0 -2px 0 rgba(0,0,0,0.06)}
-    .badge.on{background:var(--badge-on);color:#e6ffef}
-    .badge.warn{background:var(--badge-warn);color:#102a0a}
-    .icon{font-weight:900;margin-right:6px}
-    @media (max-width:980px){.app{grid-template-columns:1fr;padding:12px}.hud{right:12px;top:12px}}
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mi sitio | T. Olivera</title>
+  <link rel="stylesheet" href="./public/styles/include/index.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
+
 <body>
-  <div class="hud" id="hud">
-    <div><div class="mut">DINERO</div><div id="hud-money" class="v">0</div></div>
-    <div><div class="mut">GANANCIA</div><div id="hud-gan" class="v">1</div></div>
-  </div>
+  <header class="header">
+    <a href="?access=private" class="lock-link" title="Acceso privado">
+      <i class="fa-solid fa-lock"></i>
+    </a>
 
-  <div id="debug" role="status" aria-live="polite"></div>
-  <canvas id="particles"></canvas>
-
-  <div class="app" id="app">
-    <header>
-      <div style="display:flex;gap:12px;align-items:center">
-        <div class="logo">ID</div>
-        <div>
-          <div style="font-size:18px;font-weight:800">Idle Programmer</div>
-          <div class="muted">¡Alcanza tu sueño de ser millonario/a como programador!</div>
-        </div>
+    <div class="header-deco" aria-hidden="true"></div>
+    <div class="container header-inner">
+      <div class="avatar-wrap">
+        <img src="./public/assets/images/media/yo.jpg" alt="Foto de Tadeo" class="profile-pic" />
       </div>
-      <div class="stats">
-        <div class="stat"><div class="muted">Dinero</div><div id="money" style="font-weight:900">0</div></div>
-        <div class="stat"><div class="muted">Ganancia</div><div id="ganancia" style="font-weight:900">1</div></div>
-        <div class="stat"><div class="muted">Cantidad</div><div id="cantidad" style="font-weight:900">5</div></div>
+      <div class="hero-text">
+        <h1 class="reveal">Tadeo Olivera</h1>
+        <p class="subtitle reveal">Programador enfocado en sistemas y desarrollo web.</p>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <section class="panel" id="left">
-      <div class="section-title">Variables</div>
-      <div class="code-line">int ganancia = <span id="code-gan">1</span>;</div>
-      <div class="code-line">int cantidad = <span id="code-cant">5</span>;</div>
-      <div class="code-line">bool activo = <span id="code-act">false</span>;</div>
+  <main class="main container">
+    <section class="about reveal-section" id="about">
+      <h2>Sobre mí</h2>
+      <p>
+        Soy estudiante de Ingeniería en Computación en FING-UDELAR, con sólida formación en lógica de programación y una marcada capacidad de adaptación a diversos lenguajes y entornos tecnológicos. Poseo experiencia en el diseño y desarrollo de soluciones orientadas a sistemas, así como en la creación de sitios web completos.
+      </p>
 
-      <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
+      <p>
+        Me desenvuelvo con fluidez en los siguientes lenguajes y tecnologías:
+      </p>
+      <ul class="tech-grid" aria-label="Tecnologías que manejo">
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/cpp.png" alt="C++ logo" loading="lazy" />
+          <span class="tech-name">C++</span>
+        </li>
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/html.png" alt="HTML5 logo" loading="lazy" />
+          <span class="tech-name">HTML</span>
+        </li>
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/css.png" alt="CSS3 logo" loading="lazy" />
+          <span class="tech-name">CSS</span>
+        </li>
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/javascript.png" alt="JavaScript logo" loading="lazy" />
+          <span class="tech-name">JavaScript</span>
+        </li>
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/php.png" alt="PHP logo" loading="lazy" />
+          <span class="tech-name">PHP</span>
+        </li>
+        <li class="tech-item">
+          <img class="tech-logo" src="./public/assets/images/logos/mysql.png" alt="MySQL logo" loading="lazy" />
+          <span class="tech-name">MySQL</span>
+        </li>
+      </ul>
+    </section>
 
-      <div class="section-title">Funciones</div>
+    <section class="projects reveal-section" id="projects">
+      <h2>Proyectos destacados</h2>
 
-      <div class="small-muted">clickSimple</div>
-      <div class="code-line" id="line-simple">jugador-&gt;dinero += ganancia;</div>
-      <div style="display:flex;gap:8px;margin-bottom:8px">
-        <button id="btn-simple" class="btn">🖱️ Ejecutar clickSimple()</button>
-        <button id="buy-gan" class="btn ghost">Mejorar ganancia (<span id="cost-gan">12</span>)</button>
-      </div>
+      <div class="project-list">
+        <article class="project card">
+          <h3>Módulo TSocio</h3>
+          <p>
+            Implementación modular en C++ para la gestión eficiente de socios, con operaciones <strong>O(1)</strong> en el peor caso gracias a estructuras con tope fijo.
+          </p>
+          <p>
+            El módulo encapsula datos personales y géneros favoritos, con manejo de memoria y una interfaz clara para agregar y consultar socios.
+          </p>
 
-      <div class="small-muted">clickFor</div>
-      <div class="code-line" id="line-for">for (int i=0; i &lt; cantidad; i++) jugador-&gt;dinero += ganancia;</div>
-      <div style="display:flex;gap:8px;margin-bottom:8px">
-        <button id="btn-for" class="btn" disabled>🔁 Ejecutar clickFor()</button>
-        <button id="buy-cant" class="btn ghost">Mejorar cantidad (<span id="cost-cant">60</span>)</button>
-        <button id="unlock-for" class="btn ghost">Desbloquear (<span id="cost-unlock-for">35</span>)</button>
-      </div>
+          <div class="console-box glass">
+            <div class="console-header">
+              <div class="console-dots" aria-hidden="true">
+                <span class="console-dot red"></span>
+                <span class="console-dot yellow"></span>
+                <span class="console-dot green"></span>
+              </div>
+              <div class="console-actions">
+                <button class="btn-copy" title="Copiar salida" aria-label="Copiar salida">📋</button>
+              </div>
+            </div>
 
-      <div class="small-muted">autoWhile</div>
-      <div class="code-line" id="line-while">while (activo) jugador-&gt;dinero += ganancia;</div>
-      <div style="display:flex;gap:8px;margin-bottom:6px;align-items:center">
-        <button id="unlock-while" class="btn ghost">⏯️ Desbloquear autoWhile (<span id="cost-unlock-while">400</span>)</button>
-        <button id="toggle-act" class="btn" disabled>Activar activo</button>
-        <button id="buy-vel" class="btn ghost">⚙️ Mejorar velocidad (<span id="cost-vel">240</span>)</button>
-      </div>
-      <div class="small-muted" style="margin-bottom:10px">Velocidad: <span id="vel">1</span> ejec/sec</div>
-
-      <hr style="margin:10px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
-
-      <div class="section-title">Herramientas</div>
-      <div class="small-muted">Paga para potenciar temporalmente distintos atributos.</div>
-      <div style="display:grid;grid-template-columns:1fr 160px;gap:8px;margin-top:8px;align-items:center">
-        <div>
-          <div class="tools-row">
-            <button id="buy-compile" class="btn ghost">🧰 Mejorar Compilar (<span id="cost-compile">100</span>)</button>
-            <span id="badge-compile" class="badge">—</span>
+            <div class="console-preview" aria-live="polite">
+              <pre id="consoleText" data-text="Socio 12345678: Massimo García
+Fecha de alta: 4/6/2000
+Géneros favoritos: 12 7 3 9">Socio 12345678: Massimo García
+Fecha de alta: 4/6/2000
+Géneros favoritos: 12 7 3 9</pre>
+              <p class="caption">Ejemplo de salida en consola utilizando la función <code>imprimirTSocio</code>.</p>
+            </div>
           </div>
-          <div class="small-muted">Nivel: <span id="lvl-compile">0</span></div>
-        </div>
-        <div style="justify-self:end">
-          <button id="exec-compile" class="btn ghost">🛠️ Compilar</button>
-        </div>
+        </article>
 
-        <div>
-          <div class="tools-row">
-            <button id="buy-overclock" class="btn ghost">⚡ Mejorar Acelerar(<span id="cost-overclock">180</span>)</button>
-            <span id="badge-overclock" class="badge">—</span>
-          </div>
-          <div class="small-muted">Nivel: <span id="lvl-overclock">0</span></div>
-        </div>
-        <div style="justify-self:end">
-          <button id="exec-overclock" class="btn ghost">🔼 Acelerar</button>
-        </div>
-
-        <div>
-          <div class="tools-row">
-            <button id="buy-optimize" class="btn ghost">✨ Subir Optimizar (<span id="cost-optimize">220</span>)</button>
-            <span id="badge-optimize" class="badge">—</span>
-          </div>
-          <div class="small-muted">Nivel: <span id="lvl-optimize">0</span></div>
-        </div>
-        <div style="justify-self:end">
-          <button id="exec-optimize" class="btn ghost">🔧 Optimizar</button>
-        </div>
+        <article class="project card">
+          <h3>juegoDT <em>(en proceso)</em></h3>
+          <p>
+            Simulador web de gestión deportiva con enfoque entretenido y técnico. El usuario puede registrarse, iniciar sesión, administrar su equipo, comprar y vender jugadores, y visualizar su perfil con información personal y financiera. El sistema incluye manejo de sesiones, validación de formularios, interacción con base de datos MySQL, y lógica modular distribuida en múltiples scripts PHP.
+          </p>
+          <ul>
+            <li>Frontend: HTML, CSS, JavaScript</li>
+            <li>Backend: PHP orientado a módulos, con control de flujo y seguridad básica</li>
+            <li>Base de datos: MySQL, con operaciones CRUD para usuarios y jugadores</li>
+            <li>Funcionalidades: registro, login, tienda de jugadores, perfil personal, sistema de dinero dinámico</li>
+          </ul>
+        </article>
       </div>
     </section>
 
-    <aside class="panel" id="right">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <div><strong>Sistema & Mejoras</strong></div>
-        <div style="display:flex;gap:6px">
-          <button id="saveBtn" class="btn ghost">Guardar</button>
-          <button id="resetBtn" class="btn ghost">Reset</button>
-        </div>
-      </div>
+    <section class="contact reveal-section" id="contact">
+      <h2>Contacto</h2>
+      <a href="mailto:tadeooliverabloops@gmail.com">tadeooliverabloops@gmail.com</a>
+    </section>
+  </main>
 
-      <div class="section-title">Workers (ingreso pasivo)</div>
-      <div class="small-muted">Compra workers que generan ganancia por segundo.</div>
-      <div style="display:flex;gap:8px;margin:8px 0">
-        <button id="buy-worker" class="btn">👷 Comprar worker (<span id="cost-worker">60</span>)</button>
-        <div style="align-self:center" class="small-muted">x <span id="workers">0</span></div>
-      </div>
+  <footer class="footer">
+    <p>&copy; 2025 Tadeo Olivera.</p>
+  </footer>
 
-      <div class="section-title" style="margin-top:10px">Boosters temporales</div>
-      <div class="small-muted">Café: +% ganancia. Debugger: +crit%.</div>
-      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
-        <div>
-          <button id="boost-coffee" class="btn ghost">☕ Café (30s) <br>cost: <span id="cost-coffee">90</span></button>
-          <div class="small-muted">Dur: <span id="dur-coffee">30</span>s</div>
-        </div>
-        <div>
-          <button id="boost-debug" class="btn ghost">🔍 Debugger (30s) <br>cost: <span id="cost-debug">100</span></button>
-          <div class="small-muted">Dur: <span id="dur-debug">30</span>s</div>
-        </div>
-      </div>
-
-      <div class="section-title" style="margin-top:10px">Refactor (Prestige)</div>
-      <div class="small-muted">Refactoriza para ganar puntos permanentes que aumentan la ganancia base.</div>
-      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-        <button id="btn-refactor" class="btn ghost">♻️ Refactor (cost: <span id="cost-refactor">10000</span>)</button>
-        <div style="align-self:center" class="small-muted">Puntos: <span id="ref-points">0</span></div>
-      </div>
-
-      <div class="section-title" style="margin-top:10px">Upgrades rápidas</div>
-      <div id="upgrades" class="upgrades"></div>
-
-      <div style="margin-top:8px">
-        <strong>Visual Code</strong>
-        <pre id="visualCode"></pre>
-      </div>
-
-      <div style="margin-top:8px">
-        <strong>Registro</strong>
-        <div id="log"></div>
-      </div>
-    </aside>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const SHOW_DEBUG = false;
-      const debugEl = document.getElementById('debug');
-      function dbg(msg) { console.error(msg); if (SHOW_DEBUG && debugEl) { try { debugEl.style.display='block'; const d=document.createElement('div'); d.textContent=msg; debugEl.prepend(d); } catch(e) {} } }
-
-      const SAVE_KEY = 'idle_prog_v5_overclock';
-
-      const state = {
-        dinero: 0,
-        ganancia: 1,
-        cantidad: 5,
-        activo: false,
-        velocidad: 1,
-        unlockedFor: false,
-        unlockedWhile: false,
-        lvlGan: 0,
-        lvlCant: 0,
-        lvlVel: 0,
-        // workers
-        workers: 0,
-        // herramientas niveles
-        compileLvl: 0,
-        overclockLvl: 0, // reemplaza parallelLvl
-        optimizeLvl: 0,
-        // activaciones por uso (tiempo)
-        compileActiveUntil: 0,
-        overclockActiveUntil: 0, // reemplaza parallelActiveUntil
-        optimizeActiveUntil: 0,
-        // cooldowns
-        optimizeCooldownUntil: 0,
-        // históricos y misc
-        refactorPoints: 0,
-        totalEarned: 0,
-        comboStreak: 0,
-        comboTimeout: 2200,
-        lastClickTime: 0,
-        critChance: 5,
-        critMultiplierPercent: 150,
-        coffeeActiveUntil: 0,
-        coffeeMultiplierPercent: 150,
-        coffeeCooldownUntil: 0,
-        debuggerActiveUntil: 0,
-        debuggerCritBonus: 10,
-        debuggerCooldownUntil: 0,
-      };
-
-      const COST_BASE = {
-        gan: 12,
-        cant: 60,
-        unlockFor: 35,
-        unlockWhile: 400,
-        vel: 240,
-        worker: 60,
-        compile: 100,
-        overclock: 180, // coste base para Overclock (Acelerar)
-        optimize: 220,
-        coffee: 90,
-        debug: 100,
-        refactorBase: 10000
-      };
-
-      const $ = id => document.getElementById(id);
-      const DOM = {
-        hudMoney: $('hud-money'),
-        hudGan: $('hud-gan'),
-        money: $('money'),
-        gan: $('ganancia'),
-        cantidad: $('cantidad'),
-        codeGan: $('code-gan'),
-        codeCant: $('code-cant'),
-        codeAct: $('code-act'),
-        btnSimple: $('btn-simple'),
-        execCompile: $('exec-compile'),
-        buyGan: $('buy-gan'),
-        costGan: $('cost-gan'),
-        btnFor: $('btn-for'),
-        buyCant: $('buy-cant'),
-        costCant: $('cost-cant'),
-        unlockFor: $('unlock-for'),
-        costUnlockFor: $('cost-unlock-for'),
-        unlockWhile: $('unlock-while'),
-        costUnlockWhile: $('cost-unlock-while'),
-        toggleAct: $('toggle-act'),
-        buyVel: $('buy-vel'),
-        costVel: $('cost-vel'),
-        velText: $('vel'),
-        buyCompile: $('buy-compile'),
-        costCompile: $('cost-compile'),
-        lvlCompile: $('lvl-compile'),
-        execOverclock: $('exec-overclock'),
-        buyOverclock: $('buy-overclock'),
-        costOverclock: $('cost-overclock'),
-        lvlOverclock: $('lvl-overclock'),
-        execOptimize: $('exec-optimize'),
-        buyOptimize: $('buy-optimize'),
-        costOptimize: $('cost-optimize'),
-        lvlOptimize: $('lvl-optimize'),
-        badgeCompile: $('badge-compile'),
-        badgeOverclock: $('badge-overclock'),
-        badgeOptimize: $('badge-optimize'),
-        buyWorker: $('buy-worker'),
-        costWorker: $('cost-worker'),
-        workersText: $('workers'),
-        boostCoffee: $('boost-coffee'),
-        costCoffee: $('cost-coffee'),
-        durCoffee: $('dur-coffee'),
-        boostDebug: $('boost-debug'),
-        costDebug: $('cost-debug'),
-        durDebug: $('dur-debug'),
-        btnRefactor: $('btn-refactor'),
-        costRefactor: $('cost-refactor'),
-        refPointsText: $('ref-points'),
-        upgradesList: $('upgrades'),
-        visualCode: $('visualCode'),
-        log: $('log'),
-        saveBtn: $('saveBtn'),
-        resetBtn: $('resetBtn'),
-        particles: $('particles'),
-        lineSimple: $('line-simple'),
-        lineFor: $('line-for'),
-        lineWhile: $('line-while')
-      };
-
-      function toInt(x) { return Math.floor(Number(x)); }
-      function fmt(n) { try { return Number(n).toLocaleString(); } catch(e) { return String(n); } }
-
-      function costFormula(base, lvl, scale) { return Math.max(1, Math.round(base * Math.pow(scale, lvl))); }
-      function costGan() { return costFormula(COST_BASE.gan, state.lvlGan, 1.45); }
-      function costCant() { return costFormula(COST_BASE.cant, state.lvlCant, 1.40); }
-      function costVel() { return costFormula(COST_BASE.vel, state.lvlVel, 1.5); }
-      function costWorker() { return costFormula(COST_BASE.worker, state.workers, 1.45); }
-      function costCompileBuy() { return costFormula(COST_BASE.compile, state.compileLvl, 1.45); }
-      function costOverclockBuy() { return costFormula(COST_BASE.overclock, state.overclockLvl, 1.50); }
-      function costOptimizeBuy() { return costFormula(COST_BASE.optimize, state.optimizeLvl, 1.55); }
-      // costes por uso (más suaves)
-      function costCompileUse() { return Math.max(8, Math.round(COST_BASE.compile * (0.35 + state.compileLvl * 0.08))); }
-      function costOverclockUse() { return Math.max(12, Math.round(COST_BASE.overclock * (0.30 + state.overclockLvl * 0.07))); }
-      function costOptimizeUse() { return Math.max(40, Math.round(COST_BASE.optimize * (0.28 + state.optimizeLvl * 0.10))); }
-      function costRefactor() { const base = COST_BASE.refactorBase; return Math.max(1000, Math.round(base * Math.pow(1.18, Math.max(0, state.refactorPoints)))); }
-
-      // particles canvas
-      let canvas = DOM.particles, ctx = null;
-      function resizeCanvas() { try { if (!canvas) return; canvas.width = window.innerWidth; canvas.height = window.innerHeight; ctx = canvas.getContext('2d'); } catch(e) { dbg('resizeCanvas err: '+e.message); } }
-      resizeCanvas(); window.addEventListener('resize', resizeCanvas);
-      const particles = [];
-      function spawnParticle(x, y, color, count, big=false){
-        for (let i=0;i<count;i++){
-          particles.push({ x,y, vx:(Math.random()-0.5)*(big?10:6), vy:(Math.random()-1.5)*(big?10:6), size:(big?Math.random()*6+3:Math.random()*3+1), life:Math.random()*900+400, age:0, color, shape: Math.random()>0.7?'rect':'circle', rot:Math.random()*360, rotV:(Math.random()-0.5)*8 });
-        }
-      }
-      function updateParticles(dt){ for (let i=particles.length-1;i>=0;i--){ const p=particles[i]; p.age+=dt; if (p.age>=p.life){particles.splice(i,1); continue;} p.vy+=0.015*dt; p.x+=p.vx*(dt/16); p.y+=p.vy*(dt/16); p.vx*=0.998; p.vy*=0.998; p.rot+=p.rotV*(dt/16); } }
-      function drawParticles(){ if(!ctx) return; ctx.clearRect(0,0,canvas.width,canvas.height); for(const p of particles){ const alpha=1-(p.age/p.life); ctx.globalAlpha=alpha; if (p.shape==='rect'){ ctx.save(); ctx.translate(p.x,p.y); ctx.rotate((p.rot*Math.PI)/180); ctx.fillStyle=p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size); ctx.restore(); } else { ctx.fillStyle=p.color; ctx.beginPath(); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill(); } } ctx.globalAlpha=1; }
-      let lastParticles = performance.now();
-      function particlesLoop(t){ const dt = t - lastParticles; lastParticles = t; updateParticles(dt); drawParticles(); requestAnimationFrame(particlesLoop); }
-      requestAnimationFrame(particlesLoop);
-
-      function clamp(v,a,b){ return Math.max(a,Math.min(v,b)); }
-      function getSafeBounds(){ const vw = Math.max(document.documentElement.clientWidth||0, window.innerWidth||0); const vh = Math.max(document.documentElement.clientHeight||0, window.innerHeight||0); const header = document.querySelector('header'); const headerBottom = header ? Math.ceil(header.getBoundingClientRect().bottom) : 0; const marginTop = headerBottom + 8; const margin = 8; return { left:margin, right:vw-margin, top:marginTop, bottom:vh-margin, vw, vh }; }
-      function spawnFloating(amount, sourceEl, color='#a7f3d0'){
-        try {
-          const pop = document.createElement('div'); pop.className='float-pop'; pop.textContent=(amount>=0?'+':'')+fmt(amount); pop.style.color=color; document.body.appendChild(pop);
-          const safe = getSafeBounds(); const rect = sourceEl && sourceEl.getBoundingClientRect ? sourceEl.getBoundingClientRect() : {left:safe.left+40, top:safe.top+24, width:80, height:24};
-          const left = clamp(rect.left + rect.width/2, safe.left, safe.right);
-          const top = clamp(rect.top - 6, safe.top, safe.bottom - 30);
-          pop.style.left = left + 'px'; pop.style.top = top + 'px';
-          pop.animate([{transform:'translateY(0) scale(1)', opacity:1},{transform:'translateY(-36px) scale(1.06)',opacity:0.95,offset:0.6},{transform:'translateY(-80px) scale(1.14)',opacity:0}], { duration:900, easing:'cubic-bezier(.18,.9,.2,1)'});
-          spawnParticle(left, top, color, 8); spawnParticle(left, top, '#FFD166', 3, true);
-          setTimeout(()=>{ try{ document.body.removeChild(pop); } catch(e){} }, 920);
-        } catch(e){ dbg('spawnFloating err: '+e.message); }
-      }
-      function animateRunnerOver(el){
-        try {
-          const r = document.createElement('div'); r.className='runner'; document.body.appendChild(r);
-          const rect = el && el.getBoundingClientRect ? el.getBoundingClientRect() : {left:120,right:360,top:200,height:18};
-          const safe = getSafeBounds(); let startX = clamp(rect.left + 12, safe.left, safe.right); let endX = clamp(rect.right - 12, safe.left+12, safe.right); let y = clamp(rect.top + rect.height/2, safe.top+8, safe.bottom-8);
-          r.style.left = startX + 'px'; r.style.top = y + 'px'; const dist = endX - startX; const duration = 520; const start = performance.now();
-          const trail = setInterval(()=> spawnParticle(parseFloat(r.style.left)||startX, y, 'rgba(125,211,252,0.9)', 2), 70);
-          function step(now){ const p = (now - start) / duration; if (p < 1) { r.style.left = (startX + dist*p) + 'px'; requestAnimationFrame(step); } else { r.style.left = endX + 'px'; clearInterval(trail); setTimeout(()=>{ try{ document.body.removeChild(r); }catch(e){} }, 90); } }
-          requestAnimationFrame(step);
-        } catch(e){ dbg('animateRunner err: '+e.message); }
-      }
-      function pulseEl(el){ try{ if (el){ el.classList.add('pulse'); setTimeout(()=> el.classList.remove('pulse'),650); } }catch(e){} }
-
-      // refs
-      function multiplierPercentFromRefs(){ return 100 + (state.refactorPoints * 2); }
-
-      // effectiveGainBase combina refactor + optimize buff
-      function effectiveGainBase() {
-        let base = Math.floor(state.ganancia * multiplierPercentFromRefs() / 100);
-        // optimize buff (incrementa base)
-        if (state.optimizeActiveUntil > Date.now()) {
-          const lvl = state.optimizeLvl;
-          const percent = 115 + (lvl * 5); // lvl0 = +15%
-          base = Math.floor(base * percent / 100);
-        }
-        return base;
-      }
-
-      // combo y crit
-      function onSuccessfulClickBase() {
-        const now = performance.now();
-        if (now - state.lastClickTime <= state.comboTimeout) state.comboStreak++; else state.comboStreak = 1;
-        state.lastClickTime = now;
-      }
-      function computeClickGain() {
-        let base = effectiveGainBase();
-        // compile buff affects clicks
-        if (state.compileActiveUntil > Date.now()) {
-          const lvl = state.compileLvl;
-          const percent = 130 + (lvl * 8); // lvl0 = +30% clicks
-          base = Math.floor(base * percent / 100);
-        }
-        // combo
-        const comboBonusPercent = Math.min(40, (state.comboStreak - 1) * 4);
-        base = Math.floor(base * (100 + comboBonusPercent) / 100);
-        // coffee
-        if (state.coffeeActiveUntil > Date.now()) base = Math.floor(base * state.coffeeMultiplierPercent / 100);
-        // crit
-        let isCrit = false;
-        let critCheck = state.critChance;
-        if (state.debuggerActiveUntil > Date.now()) critCheck += state.debuggerCritBonus;
-        if (Math.random() * 100 < critCheck) {
-          isCrit = true;
-          base = Math.floor(base * state.critMultiplierPercent / 100);
-        }
-        return { gain: toInt(base), isCrit };
-      }
-
-      // acciones principales
-      function clickSimpleAction(src) {
-        onSuccessfulClickBase();
-        const res = computeClickGain();
-        state.dinero += res.gain;
-        state.totalEarned += res.gain;
-        spawnFloating(res.gain, src, res.isCrit ? '#FFD166' : '#7CFC9B');
-        animateRunnerOver(DOM.lineSimple);
-        logMsg(`[clickSimple] +${fmt(res.gain)} ${res.isCrit? '(CRIT)':''} [racha:${state.comboStreak}]`);
-        checkAchievements();
-        render();
-      }
-
-      function clickForAction(src) {
-        if (!state.unlockedFor) { logMsg('clickFor bloqueado'); return; }
-        onSuccessfulClickBase();
-        const base = effectiveGainBase();
-        let total = Math.floor(base * state.cantidad);
-        // compile buff affects clicks
-        if (state.compileActiveUntil > Date.now()) {
-          const lvl = state.compileLvl;
-          const percent = 130 + (lvl * 8);
-          total = Math.floor(total * percent / 100);
-        }
-        const comboBonusPercent = Math.min(40, (state.comboStreak - 1) * 4);
-        total = Math.floor(total * (100 + comboBonusPercent) / 100);
-        if (state.coffeeActiveUntil > Date.now()) total = Math.floor(total * state.coffeeMultiplierPercent / 100);
-        let isCrit = false;
-        let critCheck = state.critChance;
-        if (state.debuggerActiveUntil > Date.now()) critCheck += state.debuggerCritBonus;
-        if (Math.random()*100 < critCheck) { isCrit = true; total = Math.floor(total * state.critMultiplierPercent / 100); }
-        state.dinero += total; state.totalEarned += total;
-        spawnFloating(total, src, isCrit ? '#FFD166' : '#7fb3ff');
-        animateRunnerOver(DOM.lineFor);
-        logMsg(`[clickFor] +${fmt(total)} ${isCrit? '(CRIT)':''} [x${state.cantidad}]`);
-        checkAchievements();
-        render();
-      }
-
-      // HERRAMIENTAS (uso con coste)
-      function compileActionUse(src) {
-        const cost = costCompileUse();
-        if (state.dinero < cost) { logMsg('Dinero insuficiente para Compilar'); return; }
-        state.dinero -= cost;
-        const lvl = state.compileLvl;
-        const duration = 18 + (lvl * 4);
-        state.compileActiveUntil = Date.now() + duration * 1000;
-        spawnFloating(-cost, src, '#fb7185');
-        spawnParticle(window.innerWidth*0.6, 80, '#CFF0FF', 10, true);
-        logMsg(`Compilar activado: +${130 + (lvl*8) - 100}% clicks por ${duration}s`);
-        render();
-      }
-
-      // NUEVA: Acelerar (overclock) -> aumenta output por segundo de los workers por un tiempo
-      function overclockActionUse(src) {
-        const cost = costOverclockUse();
-        if (state.dinero < cost) { logMsg('Dinero insuficiente para Acelerar'); return; }
-        state.dinero -= cost;
-        const lvl = state.overclockLvl;
-        const duration = 15 + (lvl * 4); // duración base
-        state.overclockActiveUntil = Date.now() + duration * 1000;
-        spawnFloating(-cost, src, '#fb7185');
-        spawnParticle(window.innerWidth*0.45, 120, '#FFD2A8', 12, true);
-        const estPercent = 120 + (lvl * 12); // lvl0 = +20% output de workers
-        logMsg(`Acelerar activado: +${estPercent - 100}% output de workers por ${duration}s (lvl ${lvl})`);
-        render();
-      }
-
-      function optimizeActionUse(src) {
-        const cost = costOptimizeUse();
-        const now = Date.now();
-        if (state.optimizeCooldownUntil > now) { logMsg('Optimizar en cooldown'); return; }
-        if (state.dinero < cost) { logMsg('Dinero insuficiente para Optimizar'); return; }
-        state.dinero -= cost;
-        const lvl = state.optimizeLvl;
-        const duration = 18 + (lvl * 4);
-        state.optimizeActiveUntil = now + duration * 1000;
-        state.optimizeCooldownUntil = now + Math.max(20000, duration*1000 + 10000);
-        spawnFloating(-cost, src, '#fb7185');
-        spawnParticle(window.innerWidth*0.6, 100, '#A1FFCB', 10, true);
-        logMsg(`Optimizar activado: +${115 + (lvl*5) - 100}% ganancia por ${duration}s`);
-        render();
-      }
-      // FIN HERRAMIENTAS
-
-      // workers loop: generan por segundo basado en effectiveGainBase, y Overclock aumenta su output temporalmente
-      let lastWorkerTick = performance.now();
-      let workerSecondsAccum = 0;
-      let workerMoneyFrac = 0;
-      function workersLoop(now) {
-        try {
-          const dt = now - lastWorkerTick;
-          if (dt >= 80) {
-            const secs = dt / 1000;
-            if (state.workers > 0) {
-              let base = effectiveGainBase(); // base por worker por segundo
-              // aplicar overclock si activo (solo afecta output de workers)
-              if (state.overclockActiveUntil > Date.now()) {
-                const lvl = state.overclockLvl;
-                // fórmula: cada nivel aporta un % adicional (ej: lvl0 = +20%)
-                const levelBonusPercent = 20 + (lvl * 12); // lvl0=20%, lvl1=32%...
-                const totalMult = 1 + (levelBonusPercent / 100);
-                base = Math.floor(base * totalMult);
-              }
-              // nota: aquí NO cambiamos state.velocidad ni otras velocidades del juego; sólo aumentamos cuánto generan los workers por segundo.
-              const perWorker = base * 1.0; // 100% base por worker por segundo
-              workerSecondsAccum += secs;
-              if (workerSecondsAccum >= 1) {
-                const wholeSeconds = Math.floor(workerSecondsAccum);
-                workerSecondsAccum -= wholeSeconds;
-                const earnings = perWorker * state.workers * wholeSeconds + workerMoneyFrac;
-                const total = Math.floor(earnings);
-                workerMoneyFrac = earnings - total;
-                if (total > 0) {
-                  state.dinero += total; state.totalEarned += total;
-                  spawnFloating(total, DOM.buyWorker, '#9ad4ff');
-                  logMsg(`[Workers] +${fmt(total)} (x${state.workers})`);
-                  checkAchievements();
-                  render();
-                }
-              }
-            }
-            lastWorkerTick = now;
-          }
-        } catch(e) { dbg('workersLoop err: '+e.message); }
-        requestAnimationFrame(workersLoop);
-      }
-
-      // boosters
-      function buyCoffee() {
-        const cost = COST_BASE.coffee;
-        const now = Date.now();
-        if (state.coffeeCooldownUntil > now) { logMsg('Café en cooldown'); return; }
-        if (state.dinero >= cost) {
-          state.dinero -= cost;
-          state.coffeeActiveUntil = now + (30 * 1000);
-          state.coffeeCooldownUntil = now + (60 * 1000);
-          spawnFloating(-cost, DOM.boostCoffee, '#fb7185');
-          spawnParticle(window.innerWidth*0.75, 80, '#FFB4A2', 10, true);
-          logMsg('Café activado: +50% ganancia (30s)');
-          render();
-        } else logMsg('Dinero insuficiente para Café');
-      }
-      function buyDebugger() {
-        const cost = COST_BASE.debug;
-        const now = Date.now();
-        if (state.debuggerCooldownUntil > now) { logMsg('Debugger en cooldown'); return; }
-        if (state.dinero >= cost) {
-          state.dinero -= cost;
-          state.debuggerActiveUntil = now + (30 * 1000);
-          state.debuggerCooldownUntil = now + (60 * 1000);
-          spawnFloating(-cost, DOM.boostDebug, '#fb7185');
-          spawnParticle(window.innerWidth*0.75, 80, '#a6e3a1', 10, true);
-          logMsg('Debugger activado: +crit% temporal (30s)');
-          render();
-        } else logMsg('Dinero insuficiente para Debugger');
-      }
-
-      // compras
-      function buyGan() {
-        const cost = costGan();
-        if (state.dinero >= cost) {
-          state.dinero -= cost; state.lvlGan += 1; state.ganancia += 1 + Math.floor(state.refactorPoints/5);
-          pulseEl(DOM.buyGan); spawnFloating(-cost, DOM.buyGan, '#fb7185'); logMsg('Mejora ganancia comprada'); render();
-        } else logMsg('Dinero insuficiente');
-      }
-      function handleUnlockFor() {
-        const c = COST_BASE.unlockFor;
-        if (state.unlockedFor) { logMsg('clickFor ya desbloqueado'); return; }
-        if (state.dinero >= c) { state.dinero -= c; state.unlockedFor = true; pulseEl(DOM.unlockFor); spawnFloating(-c, DOM.unlockFor, '#fb7185'); logMsg('clickFor desbloqueado'); render(); try{ if (DOM.btnFor) DOM.btnFor.disabled=false; }catch(e){} }
-        else logMsg('Dinero insuficiente');
-      }
-      function buyCant() {
-        const cost = costCant();
-        if (state.dinero >= cost && state.unlockedFor) { state.dinero -= cost; state.lvlCant +=1; state.cantidad +=5; pulseEl(DOM.buyCant); spawnFloating(-cost, DOM.buyCant, '#fb7185'); logMsg('Mejora cantidad comprada'); render(); }
-        else logMsg('No puedes comprar cantidad');
-      }
-      function handleUnlockWhile() {
-        const cost = COST_BASE.unlockWhile;
-        if (state.unlockedWhile) { logMsg('autoWhile ya desbloqueado'); return; }
-        if (state.dinero >= cost) { state.dinero -= cost; state.unlockedWhile = true; try{ if (DOM.toggleAct) DOM.toggleAct.disabled=false; }catch(e){} pulseEl(DOM.unlockWhile); spawnFloating(-cost, DOM.unlockWhile, '#fb7185'); logMsg('autoWhile desbloqueado'); render(); } else logMsg('Dinero insuficiente');
-      }
-      function buyVel() {
-        const cost = costVel();
-        if (state.dinero >= cost && state.unlockedWhile) { state.dinero -= cost; state.lvlVel +=1; state.velocidad +=1; pulseEl(DOM.buyVel); spawnFloating(-cost, DOM.buyVel, '#fb7185'); logMsg('Velocidad aumentada'); render(); }
-        else logMsg('No puedes comprar velocidad');
-      }
-      function buyWorker() {
-        const cost = costWorker();
-        if (state.dinero >= cost) { state.dinero -= cost; state.workers += 1; pulseEl(DOM.buyWorker); spawnFloating(-cost, DOM.buyWorker, '#9ad4ff'); logMsg('Worker comprado'); render(); } else logMsg('Dinero insuficiente para Worker');
-      }
-
-      // comprar niveles herramientas
-      function buyCompile() { const cost = costCompileBuy(); if (state.dinero >= cost) { state.dinero -= cost; state.compileLvl +=1; pulseEl(DOM.buyCompile); spawnFloating(-cost, DOM.buyCompile, '#fb7185'); logMsg('Nivel Compilar aumentado'); render(); } else logMsg('Dinero insuficiente para Compilar'); }
-      function buyOverclock() { const cost = costOverclockBuy(); if (state.dinero >= cost) { state.dinero -= cost; state.overclockLvl +=1; pulseEl(DOM.buyOverclock); spawnFloating(-cost, DOM.buyOverclock, '#fb7185'); logMsg('Nivel Acelerar aumentado'); render(); } else logMsg('Dinero insuficiente para Acelerar'); }
-      function buyOptimize() { const cost = costOptimizeBuy(); if (state.dinero >= cost) { state.dinero -= cost; state.optimizeLvl +=1; pulseEl(DOM.buyOptimize); spawnFloating(-cost, DOM.buyOptimize, '#fb7185'); logMsg('Nivel Optimizar aumentado'); render(); } else logMsg('Dinero insuficiente para Optimizar'); }
-
-      // Refactor / Prestige
-      function refactorAction() {
-        const cost = costRefactor();
-        if (state.dinero >= cost) {
-          if (!confirm('Refactorizar reiniciará tu dinero y mejoras (conservarás puntos de refactor). ¿Continuar?')) return;
-          state.dinero = 0; state.ganancia = 1; state.cantidad = 5; state.unlockedFor = false; state.unlockedWhile = false;
-          state.lvlGan = 0; state.lvlCant = 0; state.lvlVel = 0;
-          state.workers = 0; state.compileLvl = 0; state.overclockLvl = 0; state.optimizeLvl = 0;
-          state.refactorPoints += 1;
-          spawnParticle(window.innerWidth/2, window.innerHeight/2, '#ffd166', 30, true);
-          logMsg('Refactor completado. ¡Puntos ganados!');
-          render();
-        } else logMsg('Dinero insuficiente para Refactor');
-      }
-
-      // achievements
-      const ACHS = {
-        first50: { id:'a1', name:'Primeros 50', desc:'Gana 50 dinero total', done:false, reward: 1 },
-        worker10: { id:'a2', name:'Trabajadores 10', desc:'Compra 10 workers', done:false, reward: 2 },
-        bigEarn: { id:'a3', name:'Gran Ganancia', desc:'Gana 10000 en total', done:false, reward: 5 }
-      };
-      function checkAchievements(){
-        if (!ACHS.first50.done && state.totalEarned >= 50) { ACHS.first50.done=true; state.refactorPoints += ACHS.first50.reward; logMsg(`Logro: ${ACHS.first50.name} (+${ACHS.first50.reward} RP)`); spawnParticle(window.innerWidth*0.2,80,'#a6e3a1',18,true); }
-        if (!ACHS.worker10.done && state.workers >= 10) { ACHS.worker10.done=true; state.refactorPoints += ACHS.worker10.reward; logMsg(`Logro: ${ACHS.worker10.name} (+${ACHS.worker10.reward} RP)`); spawnParticle(window.innerWidth*0.2,80,'#7CFC9B',18,true); }
-        if (!ACHS.bigEarn.done && state.totalEarned >= 10000) { ACHS.bigEarn.done=true; state.refactorPoints += ACHS.bigEarn.reward; logMsg(`Logro: ${ACHS.bigEarn.name} (+${ACHS.bigEarn.reward} RP)`); spawnParticle(window.innerWidth*0.2,80,'#FFD166',28,true); }
-      }
-
-      // safe set text
-      function safeSetText(el, txt) { if (!el) return; try { el.textContent = txt; } catch(e) { if (SHOW_DEBUG) dbg('safeSetText err: '+e.message); } }
-
-      // render
-      function render() {
-        try {
-          state.dinero = toInt(state.dinero); state.ganancia = toInt(state.ganancia); state.cantidad = toInt(state.cantidad);
-          safeSetText(DOM.money, fmt(state.dinero));
-          safeSetText(DOM.gan, fmt(state.ganancia));
-          safeSetText(DOM.cantidad, fmt(state.cantidad));
-          safeSetText(DOM.codeGan, state.ganancia);
-          safeSetText(DOM.codeCant, state.cantidad);
-          safeSetText(DOM.codeAct, state.activo ? 'true': 'false');
-
-          safeSetText(DOM.costGan, fmt(costGan()));
-          safeSetText(DOM.costCant, fmt(costCant()));
-          safeSetText(DOM.costVel, fmt(costVel()));
-          safeSetText(DOM.costUnlockFor, fmt(COST_BASE.unlockFor));
-          safeSetText(DOM.costUnlockWhile, fmt(COST_BASE.unlockWhile));
-          safeSetText(DOM.velText, state.velocidad);
-
-          // herramientas niveles y costes de compra
-          safeSetText(DOM.costCompile, fmt(costCompileBuy()));
-          safeSetText(DOM.lvlCompile, state.compileLvl);
-          safeSetText(DOM.costOverclock, fmt(costOverclockBuy()));
-          safeSetText(DOM.lvlOverclock, state.overclockLvl);
-          safeSetText(DOM.costOptimize, fmt(costOptimizeBuy()));
-          safeSetText(DOM.lvlOptimize, state.optimizeLvl);
-
-          // show use-costs in exec buttons (con iconos)
-          try {
-            if (DOM.execCompile) DOM.execCompile.textContent = `🛠️ Compilar (uso: ${fmt(costCompileUse())})`;
-            if (DOM.execOverclock) DOM.execOverclock.textContent = `🔼 Acelerar (uso: ${fmt(costOverclockUse())})`;
-            if (DOM.execOptimize) {
-              const now = Date.now();
-              const cd = Math.max(0, Math.ceil((state.optimizeCooldownUntil - now) / 1000));
-              DOM.execOptimize.textContent = state.optimizeCooldownUntil > now ? `🔧 Optimizar (cd ${cd}s)` : `🔧 Optimizar (uso: ${fmt(costOptimizeUse())})`;
-            }
-          } catch(e){}
-
-          safeSetText(DOM.costWorker, fmt(costWorker()));
-          safeSetText(DOM.workersText, state.workers);
-          safeSetText(DOM.costCoffee, fmt(COST_BASE.coffee));
-          safeSetText(DOM.costDebug, fmt(COST_BASE.debug));
-          safeSetText(DOM.costRefactor, fmt(costRefactor()));
-          safeSetText(DOM.refPointsText, state.refactorPoints);
-          safeSetText(DOM.hudMoney, fmt(state.dinero));
-          safeSetText(DOM.hudGan, fmt(state.ganancia));
-
-          // badges
-          const now = Date.now();
-          if (DOM.badgeCompile) {
-            if (state.compileActiveUntil > now) {
-              const s = Math.ceil((state.compileActiveUntil - now)/1000);
-              DOM.badgeCompile.className = 'badge on';
-              DOM.badgeCompile.textContent = `⏱ ${s}s`;
-            } else {
-              DOM.badgeCompile.className = 'badge';
-              DOM.badgeCompile.textContent = '—';
-            }
-          }
-          if (DOM.badgeOverclock) {
-            if (state.overclockActiveUntil > now) {
-              const s = Math.ceil((state.overclockActiveUntil - now)/1000);
-              DOM.badgeOverclock.className = 'badge on';
-              DOM.badgeOverclock.textContent = `⏱ ${s}s`;
-            } else {
-              DOM.badgeOverclock.className = 'badge';
-              DOM.badgeOverclock.textContent = '—';
-            }
-          }
-          if (DOM.badgeOptimize) {
-            if (state.optimizeActiveUntil > now) {
-              const s = Math.ceil((state.optimizeActiveUntil - now)/1000);
-              DOM.badgeOptimize.className = 'badge on';
-              DOM.badgeOptimize.textContent = `⏱ ${s}s`;
-            } else if (state.optimizeCooldownUntil > now) {
-              const cd = Math.ceil((state.optimizeCooldownUntil - now)/1000);
-              DOM.badgeOptimize.className = 'badge warn';
-              DOM.badgeOptimize.textContent = `CD ${cd}s`;
-            } else {
-              DOM.badgeOptimize.className = 'badge';
-              DOM.badgeOptimize.textContent = '—';
-            }
-          }
-
-          // button enable/disable
-          try { if (DOM.buyGan) DOM.buyGan.disabled = state.dinero < costGan(); } catch(e){}
-          try { if (DOM.unlockFor) DOM.unlockFor.disabled = state.unlockedFor || state.dinero < COST_BASE.unlockFor; } catch(e){}
-          try { if (DOM.btnFor) DOM.btnFor.disabled = !state.unlockedFor; } catch(e){}
-          try { if (DOM.buyCant) DOM.buyCant.disabled = !state.unlockedFor || state.dinero < costCant(); } catch(e){}
-          try { if (DOM.unlockWhile) DOM.unlockWhile.disabled = state.unlockedWhile || state.dinero < COST_BASE.unlockWhile; } catch(e){}
-          try { if (DOM.toggleAct) DOM.toggleAct.disabled = !state.unlockedWhile; } catch(e){}
-          try { if (DOM.buyVel) DOM.buyVel.disabled = !state.unlockedWhile || state.dinero < costVel(); } catch(e){}
-          try { if (DOM.buyWorker) DOM.buyWorker.disabled = state.dinero < costWorker(); } catch(e){}
-          try { if (DOM.buyCompile) DOM.buyCompile.disabled = state.dinero < costCompileBuy(); } catch(e){}
-          try { if (DOM.buyOverclock) DOM.buyOverclock.disabled = state.dinero < costOverclockBuy(); } catch(e){}
-          try { if (DOM.buyOptimize) DOM.buyOptimize.disabled = state.dinero < costOptimizeBuy(); } catch(e){}
-          try { if (DOM.execCompile) DOM.execCompile.disabled = state.dinero < costCompileUse(); } catch(e){}
-          try { if (DOM.execOverclock) DOM.execOverclock.disabled = state.dinero < costOverclockUse(); } catch(e){}
-          try { if (DOM.execOptimize) DOM.execOptimize.disabled = Date.now() < state.optimizeCooldownUntil || state.dinero < costOptimizeUse(); } catch(e){}
-          try { if (DOM.boostCoffee) DOM.boostCoffee.disabled = Date.now() < state.coffeeCooldownUntil || state.dinero < COST_BASE.coffee; } catch(e){}
-          try { if (DOM.boostDebug) DOM.boostDebug.disabled = Date.now() < state.debuggerCooldownUntil || state.dinero < COST_BASE.debug; } catch(e){}
-          try { if (DOM.btnRefactor) DOM.btnRefactor.disabled = state.dinero < costRefactor(); } catch(e){}
-
-          // visual code
-          const vc = [
-            'int ganancia = ' + state.ganancia + ';',
-            'int cantidad = ' + state.cantidad + ';',
-            'bool activo = ' + (state.activo ? 'true' : 'false') + ';',
-            '',
-            'void clickSimple() { jugador->dinero += ganancia; }',
-            state.unlockedFor ? 'void clickFor() { for (int i=0;i<cantidad;i++) jugador->dinero += ganancia; }' : '// clickFor bloqueado',
-            state.unlockedWhile ? 'void autoWhile() { while (activo) jugador->dinero += ganancia; }' : '// autoWhile bloqueado',
-            '',
-            'Workers() // Generan ingreso pasivo por segundo',
-            '',
-            'Compilar() // uso con coste: buff temporal a clicks',
-            'Acelerar() // uso con coste: aumenta velocidad de workers temporalmente',
-            'Optimizar() // uso con coste + cooldown: buff a ganancia base'
-          ].join('\n');
-          try { if (DOM.visualCode) DOM.visualCode.textContent = vc; } catch(e){}
-          try { if (DOM.toggleAct) DOM.toggleAct.textContent = state.activo ? 'Desactivar activo' : 'Activar activo'; } catch(e){}
-        } catch(e) { dbg('render err: '+e.message); }
-      }
-
-      function logMsg(m) {
-        try {
-          const t = new Date().toLocaleTimeString();
-          const e = document.createElement('div'); e.textContent = `[${t}] ${m}`; if (DOM.log) DOM.log.prepend(e);
-          if (DOM.log) while (DOM.log.children.length > 300) DOM.log.removeChild(DOM.log.lastChild);
-        } catch(e){ dbg('logMsg err: '+e.message); }
-      }
-
-      // save/load
-      function save() {
-        try {
-          const payload = {
-            dinero: state.dinero, ganancia: state.ganancia, cantidad: state.cantidad,
-            activo: state.activo, velocidad: state.velocidad,
-            unlockedFor: state.unlockedFor, unlockedWhile: state.unlockedWhile,
-            lvlGan: state.lvlGan, lvlCant: state.lvlCant, lvlVel: state.lvlVel,
-            workers: state.workers,
-            compileLvl: state.compileLvl, overclockLvl: state.overclockLvl, optimizeLvl: state.optimizeLvl,
-            compileActiveUntil: state.compileActiveUntil, overclockActiveUntil: state.overclockActiveUntil,
-            optimizeActiveUntil: state.optimizeActiveUntil, optimizeCooldownUntil: state.optimizeCooldownUntil,
-            refactorPoints: state.refactorPoints, totalEarned: state.totalEarned,
-            ACHS
-          };
-          localStorage.setItem(SAVE_KEY, JSON.stringify(payload));
-          state.lastSaved = Date.now();
-          logMsg('Guardado.');
-        } catch(e) { dbg('save error: '+e.message); }
-      }
-      function load() {
-        try {
-          const raw = localStorage.getItem(SAVE_KEY);
-          if (!raw) return;
-          const p = JSON.parse(raw);
-          state.dinero = toInt(p.dinero ?? state.dinero);
-          state.ganancia = toInt(p.ganancia ?? state.ganancia);
-          state.cantidad = toInt(p.cantidad ?? state.cantidad);
-          state.activo = Boolean(p.activo ?? state.activo);
-          state.velocidad = toInt(p.velocidad ?? state.velocidad);
-          state.unlockedFor = Boolean(p.unlockedFor ?? state.unlockedFor);
-          state.unlockedWhile = Boolean(p.unlockedWhile ?? state.unlockedWhile);
-          state.lvlGan = toInt(p.lvlGan ?? 0);
-          state.lvlCant = toInt(p.lvlCant ?? 0);
-          state.lvlVel = toInt(p.lvlVel ?? 0);
-          state.workers = toInt(p.workers ?? 0);
-          state.compileLvl = toInt(p.compileLvl ?? 0);
-          state.overclockLvl = toInt(p.overclockLvl ?? 0);
-          state.optimizeLvl = toInt(p.optimizeLvl ?? 0);
-          state.compileActiveUntil = toInt(p.compileActiveUntil ?? 0);
-          state.overclockActiveUntil = toInt(p.overclockActiveUntil ?? 0);
-          state.optimizeActiveUntil = toInt(p.optimizeActiveUntil ?? 0);
-          state.optimizeCooldownUntil = toInt(p.optimizeCooldownUntil ?? 0);
-          state.refactorPoints = toInt(p.refactorPoints ?? 0);
-          state.totalEarned = toInt(p.totalEarned ?? 0);
-          if (p.ACHS) { Object.keys(p.ACHS).forEach(k => { if (ACHS[k]) ACHS[k].done = p.ACHS[k].done; }); }
-          logMsg('Partida cargada.');
-        } catch(e) { dbg('load error: '+e.message); }
-      }
-
-      // events
-      try { if (DOM.btnSimple) DOM.btnSimple.addEventListener('click', ()=> clickSimpleAction(DOM.btnSimple)); } catch(e){}
-      try { if (DOM.btnFor) DOM.btnFor.addEventListener('click', ()=> clickForAction(DOM.btnFor)); } catch(e){}
-      try { if (DOM.execCompile) DOM.execCompile.addEventListener('click', ()=> compileActionUse(DOM.execCompile)); } catch(e){}
-      try { if (DOM.execOverclock) DOM.execOverclock.addEventListener('click', ()=> overclockActionUse(DOM.execOverclock)); } catch(e){}
-      try { if (DOM.execOptimize) DOM.execOptimize.addEventListener('click', ()=> optimizeActionUse(DOM.execOptimize)); } catch(e){}
-      try { if (DOM.buyGan) DOM.buyGan.addEventListener('click', buyGan); } catch(e){}
-      try { if (DOM.unlockFor) DOM.unlockFor.addEventListener('click', handleUnlockFor); } catch(e){}
-      try { if (DOM.buyCant) DOM.buyCant.addEventListener('click', buyCant); } catch(e){}
-      try { if (DOM.unlockWhile) DOM.unlockWhile.addEventListener('click', handleUnlockWhile); } catch(e){}
-      try { if (DOM.buyVel) DOM.buyVel.addEventListener('click', buyVel); } catch(e){}
-      try { if (DOM.buyWorker) DOM.buyWorker.addEventListener('click', buyWorker); } catch(e){}
-      try { if (DOM.buyCompile) DOM.buyCompile.addEventListener('click', buyCompile); } catch(e){}
-      try { if (DOM.buyOverclock) DOM.buyOverclock.addEventListener('click', buyOverclock); } catch(e){}
-      try { if (DOM.buyOptimize) DOM.buyOptimize.addEventListener('click', buyOptimize); } catch(e){}
-      try { if (DOM.boostCoffee) DOM.boostCoffee.addEventListener('click', buyCoffee); } catch(e){}
-      try { if (DOM.boostDebug) DOM.boostDebug.addEventListener('click', buyDebugger); } catch(e){}
-      try { if (DOM.btnRefactor) DOM.btnRefactor.addEventListener('click', refactorAction); } catch(e){}
-      try { if (DOM.saveBtn) DOM.saveBtn.addEventListener('click', save); } catch(e){}
-      try { if (DOM.resetBtn) DOM.resetBtn.addEventListener('click', ()=> { if(confirm('Reiniciar?')) { localStorage.removeItem(SAVE_KEY); location.reload(); } }); } catch(e){}
-      try { window.addEventListener('beforeunload', save); } catch(e){}
-      try { document.addEventListener('visibilitychange', ()=> { if (document.hidden) save(); }); } catch(e){}
-
-      // toggle autoWhile
-      try { if (DOM.toggleAct) DOM.toggleAct.addEventListener('click', () => {
-        if (!state.unlockedWhile) { logMsg('autoWhile no está desbloqueado'); return; }
-        state.activo = !state.activo;
-        logMsg(`autoWhile ${state.activo ? 'activado' : 'desactivado'}`);
-        render();
-      }); } catch(e){}
-
-      // autoWhile loop
-      let lastAutoTick = performance.now();
-      let autoAccumulator = 0;
-      function autoLoop(now) {
-        try {
-          const ms = now - lastAutoTick; lastAutoTick = now;
-          if (state.activo && state.unlockedWhile && state.velocidad > 0) {
-            const ejecRaw = (state.velocidad * ms) / 1000 + autoAccumulator;
-            const ejec = Math.floor(ejecRaw);
-            autoAccumulator = ejecRaw - ejec;
-            if (ejec > 0) {
-              let add = ejec * effectiveGainBase();
-              if (state.coffeeActiveUntil > Date.now()) add = Math.floor(add * state.coffeeMultiplierPercent / 100);
-              state.dinero += add; state.totalEarned += add;
-              spawnFloating(add, DOM.toggleAct, '#FFD166');
-              animateRunnerOver(DOM.lineWhile);
-              logMsg(`autoWhile: ${ejec} ejec => +${fmt(add)}`);
-              checkAchievements();
-              render();
-            }
-          }
-        } catch(e){ dbg('autoLoop err: '+e.message); }
-        requestAnimationFrame(autoLoop);
-      }
-
-      // workers loop start
-      lastWorkerTick = performance.now();
-      requestAnimationFrame(workersLoop);
-      requestAnimationFrame(autoLoop);
-
-      // load start
-      load();
-      if (state.dinero === 0) { state.dinero = 10; logMsg('Bienvenido: +10 dinero inicial'); }
-      render();
-    }); // DOMContentLoaded
-  </script>
+  <script type="module" src="./public/src/include/index.js" defer></script>
 </body>
 </html>
